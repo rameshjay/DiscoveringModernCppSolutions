@@ -1,3 +1,4 @@
+#include <bits/c++config.h>
 #include <cstdint>
 #include <vector>
 #include <stdexcept>
@@ -27,7 +28,7 @@ public:
   }
 
   void clear() { m_data.clear(); }
-  void size() { return m_data.size(); }
+  std::size_t size() { return m_data.size(); }
 
   bool full() const noexcept { return m_capacity == m_data.size(); }
   bool empty() const noexcept { return 0 == m_data.size(); }
