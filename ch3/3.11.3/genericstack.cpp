@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <cassert>
 
+namespace mine {
 template <typename T>
 class stack {
 public:
@@ -36,9 +37,10 @@ private:
   std::size_t m_capacity = 10; // hard wired capacity
   std::vector<T> m_data;
 };
+} // namespace mine
 
 int main() {
-  stack<int> is;
+  mine::stack<int> is;
 
   for (int i = 0; i < 10; ++i) {
     is.push(i);
