@@ -19,7 +19,7 @@ public:
     return *this;
   }
 
-  odd_iterator operator++() {
+  odd_iterator &operator++() {
     i += 2;
     return *this;
   }
