@@ -8,6 +8,7 @@ add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/3.11.9")
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/3.11.10")
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/3.11.11")
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/3.11.12")
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/3.11.13")
 
 set_target_properties(
 	3.11.1
@@ -20,4 +21,5 @@ set_target_properties(
 	3.11.10
 	3.11.11
 	3.11.12
+	3.11.13
     PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/output/ch3")
