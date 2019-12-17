@@ -5,6 +5,8 @@ project(DiscoveringModernCppSolutions
     HOMEPAGE_URL https://github.com/p1v0t/DiscoveringModernCppSolutions
     LANGUAGES CXX)
 
+option(BUILD_EXERCISE_4.8.3 "Ex 4.8.3 requires external libs to build" OFF) 
+
 add_subdirectory(ch1)
 add_subdirectory(ch2)
 add_subdirectory(ch3)
