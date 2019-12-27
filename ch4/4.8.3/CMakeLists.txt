@@ -1,9 +1,4 @@
 if(BUILD_EXERCISE_4.8.3) 
-	include(FindSDL) 
-	if(NOT SDL_FOUND) 
-		message(FATAL_ERROR "SDL1 requred for this example")
-    endif()
-
 	find_package(SDL2 CONFIG QUIET REQUIRED COMPONENTS SDL2)
 
 	if(NOT SDL2_FOUND)
