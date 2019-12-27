@@ -89,11 +89,11 @@ revealed the trickiest part of it in the meantime.
 
 A simple method for computing the integral of a function is the trapezoid rule. Suppose
 we want to integrate the function f over the interval [a, b]. We split the interval in n small
-intervals [x i , x i+1 ] of the same length h = (b − a)/n and approximate f by a piecewise linear
+intervals [x<sub>i</sub>, x<sub>i+1</sub>] of the same length h = (b − a)/n and approximate f by a piecewise linear
 function. The integral is then approximated by the sum of the integrals of that function.
 This leads to the following formula: 
 
-~~(unformatted math formula)~~
+I = h/2 f(a) + h/2  f(b) + h <span>&#8721;</span><sup>n-1</sup><sub>j=1</sub> f(a+jh)
 
 For comparison, implement this using inheritance and generic programming. As a test case,
 integrate:
