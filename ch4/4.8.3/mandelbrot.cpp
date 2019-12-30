@@ -1,73 +1,77 @@
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_assert.h>
-#include <SDL2/SDL_stdinc.h>
-#include <cstdlib>
+#include <bits/stdint-uintn.h>
+#include <cmath>
 #include <cstdint>
-#include <cassert>
 #include <complex>
 #include <iostream>
 
-using namespace std;
-
-class mandel_pixel {
+struct mandel_pixel {
 public:
-  mandel_pixel(SDL_Surface *screen, int x, int y, int xdim, int ydim,
-               int max_iter)
-      : screen(screen), max_iter(max_iter), iter(0), c(x, y) {
+  mandel_pixel(SDL_Surface *screen, int x, int y, int xdim, int ydim) {
+    c = std::complex<double>(x, y);
+    m_screen = screen;
 
     // scale y to [-1.2,1.2]
+
     c *= 2.4 / ydim;
 
-    c -= complex<double>(1.2 * xdim / ydim + 0.5,
-                         1.2); // shift -0.5+0i to the center
+    c -= std::complex<double>((1.2 * xdim) / (ydim + 0.5),
+                              1.2); // shift -0.5+0i to the center
 
     iterate();
   }
 
-  uint32_t color() const {
+  void draw_pixel(int x, int y) {
+    auto pixel_address = reinterpret_cast<std::uint32_t *>(m_screen->pixels) +
+                         (y * m_screen->w) + x;
 
-    if (iter == max_iter) {
-      return SDL_MapRGB(screen->format, 0, 0, 0);
-    }
-
-    const int ci = 512 * iter / max_iter; // incremental value for color
-
-    if (iter < max_iter / 2) {
-      return SDL_MapRGB(screen->format, ci, 0, 0);
-    } else {
-      return SDL_MapRGB(screen->format, 255, ci - 255, ci - 255);
-    }
+    *pixel_address = color();
   }
 
 private:
-  void iterate() {
-    complex<double> z = c;
+  uint32_t color() const noexcept {
 
-    while (iter < max_iter && norm(z) <= 4.0) {
-      z = z * z + c;
-      iter++;
+    if (iteration == maximum_iteration) {
+      return SDL_MapRGB(m_screen->format, 0, 0,
+                        0); // red=green=blue=0, the set itself is black
+    }
+
+    // fun part, color the area around the set
+
+    // generete pixel with iterations. takaen from
+    // http://www.programming-during-recess.net/2016/06/26/color-schemes-for-mandelbrot-sets/
+    int factor =
+        static_cast<int>(512 * std::sqrt(iteration) / maximum_iteration);
+    //
+    if (iteration < (maximum_iteration / 2)) {
+      return SDL_MapRGB(m_screen->format, factor, factor, factor);
+    } else { // colors the set border
+      return SDL_MapRGB(m_screen->format, 255, 255, 255); // white
+    }
+  }
+
+  void iterate() {
+    std::complex<double> Z = c;
+
+    while (iteration < maximum_iteration && std::norm(Z) <= 4.0) {
+      Z = Z * Z + c;
+      ++iteration;
     }
   };
 
-  SDL_Surface *screen;
-  const int max_iter;
-  int iter;
-  complex<double> c;
+  const int maximum_iteration = 50;
+  int iteration = 0;
+  std::complex<double> c;
+
+  SDL_Surface *m_screen;
 };
 
-void put_pixel(SDL_Surface *screen, int x, int y, uint32_t pixel) {
-  auto pixel_address =
-      reinterpret_cast<uint32_t *>(screen->pixels) + y * screen->w + x;
-
-  *pixel_address = pixel;
-}
-
 int main() {
-  const int max_iter = 30;
   int xdim = 1200, ydim = 800;
 
   if (SDL_Init(SDL_INIT_VIDEO) != 0) {
     std::cerr << "video module not initialized ";
+    return -1;
   }
 
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
@@ -87,7 +91,7 @@ int main() {
   SDL_Surface *screen =
       SDL_CreateRGBSurface(0, xdim, ydim, 32, rmask, gmask, bmask, amask);
 
-  if (screen == nullptr) {
+  if (!screen) {
     std::cerr << "screen not initialized ";
   }
 
@@ -95,8 +99,8 @@ int main() {
 
   for (int y = 0; y < ydim; ++y) {
     for (int x = 0; x < xdim; ++x) {
-      mandel_pixel m(screen, x, y, xdim, ydim, max_iter);
-      put_pixel(screen, x, y, m.color());
+      mandel_pixel m(screen, x, y, xdim, ydim);
+      m.draw_pixel(x, y);
     }
   }
 
