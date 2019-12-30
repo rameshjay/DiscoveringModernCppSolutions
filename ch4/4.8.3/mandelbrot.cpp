@@ -45,7 +45,7 @@ private:
     //
     if (iteration < (maximum_iteration / 2)) {
       return SDL_MapRGB(m_screen->format, factor, factor, factor);
-    } else { // colors the set border
+    } else {
       return SDL_MapRGB(m_screen->format, 255, 255, 255); // white
     }
   }
@@ -93,6 +93,7 @@ int main() {
 
   if (!screen) {
     std::cerr << "screen not initialized ";
+    return -1;
   }
 
   SDL_LockSurface(screen);
@@ -106,7 +107,7 @@ int main() {
 
   SDL_UnlockSurface(screen);
 
-  SDL_SaveBMP(screen, "mandelbrot.bmp");
+  SDL_SaveBMP(screen, "mandelbrot_set.bmp");
 
   SDL_FreeSurface(screen);
 
