@@ -7,9 +7,9 @@ if(BUILD_EXERCISE_4.8.3)
 
     add_executable(Mandelbrot mandelbrot.cpp)
 
-	target_link_libraries(mandelbrot.cpp PUBLIC
+	target_link_libraries(Mandelbrot PUBLIC
 		${SDL2_LIBRARIES})	
 
-	target_include_directories(mandelbrot.cpp PUBLIC
+	target_include_directories(Mandelbrot PUBLIC
 		${SDL2_INCLUDE_DIRS})
 endif()
