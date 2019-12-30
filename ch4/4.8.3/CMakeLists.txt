@@ -12,4 +12,7 @@ if(BUILD_EXERCISE_4.8.3)
 
 	target_include_directories(Mandelbrot PUBLIC
 		${SDL2_INCLUDE_DIRS})
+
+	set_property(TARGET Mandelbrot
+    PROPERTY RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/output/ch4")
 endif()
