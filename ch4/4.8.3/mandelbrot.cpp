@@ -3,22 +3,29 @@
 #include <cmath>
 #include <cstdint>
 #include <complex>
+#include <cstdlib>
 #include <iostream>
 
 struct mandel_pixel {
 public:
   mandel_pixel(SDL_Surface *screen, int x, int y, int xdim, int ydim) {
-    c = std::complex<double>(x, y);
+
     m_screen = screen;
 
-    // scale y to [-1.2,1.2]
+    std::complex<double> c(x, y);
 
+    // scale y to [-1.2,1.2]
     c *= 2.4 / ydim;
 
     c -= std::complex<double>((1.2 * xdim) / (ydim + 0.5),
                               1.2); // shift -0.5+0i to the center
 
-    iterate();
+    std::complex<double> Z = c;
+
+    while (iteration < maximum_iteration && std::norm(Z) <= 4.0) {
+      Z = Z * Z + c;
+      ++iteration;
+    }
   }
 
   void draw_pixel(int x, int y) {
@@ -32,17 +39,12 @@ private:
   uint32_t color() const noexcept {
 
     if (iteration == maximum_iteration) {
-      return SDL_MapRGB(m_screen->format, 0, 0,
-                        0); // red=green=blue=0, the set itself is black
+      return SDL_MapRGB(m_screen->format, 0, 0, 0); // black
     }
 
-    // fun part, color the area around the set
-
-    // generete pixel with iterations. takaen from
-    // http://www.programming-during-recess.net/2016/06/26/color-schemes-for-mandelbrot-sets/
     int factor =
         static_cast<int>(512 * std::sqrt(iteration) / maximum_iteration);
-    //
+
     if (iteration < (maximum_iteration / 2)) {
       return SDL_MapRGB(m_screen->format, factor, factor, factor);
     } else {
@@ -50,20 +52,10 @@ private:
     }
   }
 
-  void iterate() {
-    std::complex<double> Z = c;
-
-    while (iteration < maximum_iteration && std::norm(Z) <= 4.0) {
-      Z = Z * Z + c;
-      ++iteration;
-    }
-  };
-
   const int maximum_iteration = 50;
   int iteration = 0;
-  std::complex<double> c;
 
-  SDL_Surface *m_screen;
+  SDL_Surface *m_screen{};
 };
 
 int main() {
@@ -71,7 +63,7 @@ int main() {
 
   if (SDL_Init(SDL_INIT_VIDEO) != 0) {
     std::cerr << "video module not initialized ";
-    return -1;
+    return EXIT_FAILURE;
   }
 
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
@@ -93,7 +85,7 @@ int main() {
 
   if (!screen) {
     std::cerr << "screen not initialized ";
-    return -1;
+    return EXIT_FAILURE;
   }
 
   SDL_LockSurface(screen);
