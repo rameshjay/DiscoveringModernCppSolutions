@@ -13,6 +13,12 @@ if(BUILD_EXERCISE_4.8.3)
 	target_include_directories(Mandelbrot PUBLIC
 		${SDL2_INCLUDE_DIRS})
 
-	set_property(TARGET Mandelbrot
-    PROPERTY RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/output/ch4")
+	add_executable(Fatou_Dust fatou_dust.cpp)
+
+	target_link_libraries(Fatou_Dust PUBLIC
+		${SDL2_LIBRARIES})	
+
+	target_include_directories(Fatou_Dust PUBLIC
+		${SDL2_INCLUDE_DIRS})
+
 endif()

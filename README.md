@@ -26,3 +26,8 @@ directories, so you can easily navigate.
 - An image (Mandelbrot set) generated on exercise 4.8.3
 
 ![mandelbrotset](./images/mandelbrot_set.bmp)
+
+- Cantor dust generated on exercise 4.8.3
+
+![CantorDust](./images/Cantor_dust.bmp)
+
