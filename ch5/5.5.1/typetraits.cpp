@@ -4,12 +4,12 @@
 namespace mine {
 
 template <typename T>
-struct remove_reference {
+struct remove_reference final {
   using type = T;
 };
 
 template <typename T>
-struct remove_reference<T &> {
+struct remove_reference<T &> final {
   using type = T;
 };
 
@@ -17,7 +17,7 @@ template <typename T>
 using remove_reference_t = typename remove_reference<T>::type;
 
 template <typename T>
-struct add_reference {
+struct add_reference final {
   using type = T &;
 };
 
