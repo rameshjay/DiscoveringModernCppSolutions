@@ -21,9 +21,17 @@ if(BUILD_EXERCISE_4.8.3)
 	target_include_directories(Fatou_Dust PUBLIC
 		${SDL2_INCLUDE_DIRS})
 
+	add_executable(Julia_Set julia_set.cpp)
+
+	target_link_libraries(Julia_Set PUBLIC
+		${SDL2_LIBRARIES})	
+
+	target_include_directories(Julia_Set PUBLIC
+		${SDL2_INCLUDE_DIRS})
+
 	set_target_properties( 
 		Mandelbrot
+		Julia_Set
 		Fatou_Dust 
 		PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/output/ch4")
-
 endif()
