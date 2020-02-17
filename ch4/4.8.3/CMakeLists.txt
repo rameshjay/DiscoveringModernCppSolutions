@@ -21,4 +21,9 @@ if(BUILD_EXERCISE_4.8.3)
 	target_include_directories(Fatou_Dust PUBLIC
 		${SDL2_INCLUDE_DIRS})
 
+	set_target_properties( 
+		Mandelbrot
+		Fatou_Dust 
+		PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/output/ch4")
+
 endif()
